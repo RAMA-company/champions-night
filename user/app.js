@@ -1,7 +1,8 @@
 // This file handles both login and registration functionality for the index.html page.
+// این فایل منطق ورود و ثبت‌نام را برای صفحه index.html مدیریت می‌کند.
 
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+    // عناصر DOM
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const toggleFormBtn = document.getElementById('toggle-form-btn');
@@ -9,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessageText = document.getElementById('error-message-text');
 
     // -------------------------------------------------------------
-    // تنظیم URL جدید Apps Script در این قسمت
+    // تنظیم URL Apps Script
     // -------------------------------------------------------------
     const API_URL = 'https://script.google.com/macros/s/AKfycbwipBlLlTyo1BUYwCZ6mmuHCUu9ZAW-_gCGrVQT0vVX3hKW8fVbwlqJ9WaVw_qpkHXd3Q/exec';
 
-    // Utility function to display messages
+    // یک تابع کمکی برای نمایش پیام‌های تأیید و خطا
     function showMessage(message, type = 'error') {
         errorMessageText.textContent = message;
         messageBox.classList.remove('hidden', 'bg-red-100', 'bg-green-100');
@@ -25,26 +26,28 @@ document.addEventListener('DOMContentLoaded', () => {
         messageBox.classList.remove('hidden');
     }
 
-    // Toggle between login and registration forms
+    // منطق اصلی برای جابجایی بین فرم‌های ورود و ثبت‌نام
+    // این بخش به دقت بازبینی شده است تا مطمئن شویم که کار می‌کند.
     if (toggleFormBtn) {
         toggleFormBtn.addEventListener('click', () => {
+            // بررسی می‌کنیم که کدام فرم در حال نمایش است
             if (loginForm.classList.contains('hidden')) {
-                // Show login form
+                // اگر فرم ورود پنهان است، آن را نمایش می‌دهیم
                 loginForm.classList.remove('hidden');
                 registerForm.classList.add('hidden');
                 toggleFormBtn.textContent = 'ثبت‌نام نکرده‌اید؟ اینجا کلیک کنید';
             } else {
-                // Show registration form
+                // اگر فرم ورود نمایش داده شده، آن را پنهان می‌کنیم و فرم ثبت‌نام را نمایش می‌دهیم
                 loginForm.classList.add('hidden');
                 registerForm.classList.remove('hidden');
                 toggleFormBtn.textContent = 'قبلاً ثبت‌نام کرده‌اید؟ ورود به سیستم';
             }
-            // Clear any messages
+            // هرگونه پیام قبلی را پنهان می‌کنیم
             messageBox.classList.add('hidden');
         });
     }
 
-    // Handle login form submission
+    // مدیریت ارسال فرم ورود
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Handle registration form submission
+    // مدیریت ارسال فرم ثبت‌نام
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -103,10 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (result.ok) {
                     showMessage(`ثبت‌نام شما با موفقیت انجام شد! کد عضویت شما: ${result.data.member_id} و PIN شما: ${result.data.pin}`, 'success');
-                    // Automatically switch back to login form after registration
+                    // پس از ثبت‌نام، به صورت خودکار به فرم ورود برمی‌گردیم
                     setTimeout(() => {
-                        toggleFormBtn.click();
-                        document.getElementById('member-id-login').value = result.data.member_id;
+                        if (toggleFormBtn) {
+                            toggleFormBtn.click();
+                            document.getElementById('member-id-login').value = result.data.member_id;
+                        }
                     }, 3000);
                 } else {
                     showMessage(result.error || 'خطا در ثبت‌نام.');
