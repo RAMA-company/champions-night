@@ -6,6 +6,7 @@
     <title>ورود به پنل کاربری</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind config for custom font -->
     <script>
         tailwind.config = {
             theme: {
@@ -17,45 +18,49 @@
             },
         };
     </script>
+    <!-- Vazirmatn Font -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         body {
             font-family: 'Vazirmatn', sans-serif;
+            background-color: #f7fafc; /* رنگ پس‌زمینه */
         }
         .container-shadow {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        .bg-login {
-            background-color: #f7fafc;
-        }
-        .btn-primary {
-            background-color: #4c51bf;
-        }
-        .btn-primary:hover {
-            background-color: #434190;
+        input:focus {
+            border-color: transparent;
         }
     </style>
 </head>
-<body class="bg-login flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <div class="bg-white p-8 rounded-2xl container-shadow w-full max-w-md mx-4 sm:mx-auto">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">باشگاه ورزشی</h1>
-        <div id="message-box" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4 hidden" role="alert">
-            <span class="block sm:inline" id="error-message-text"></span>
+    <div class="w-full max-w-md p-8 bg-white rounded-2xl container-shadow">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">ورود / ثبت‌نام</h1>
+            <p class="text-gray-500 mt-2">به باشگاه خوش آمدید.</p>
         </div>
 
-        <!-- Forms Container -->
-        <div id="form-container" class="transition-transform duration-500">
-            <!-- Login Form -->
-            <form id="login-form">
-                <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">ورود اعضا</h2>
+        <!-- Message Box -->
+        <div id="message-box" class="hidden mb-4 p-4 rounded-xl border-2 transition-all duration-300 flex items-center justify-between">
+            <p id="error-message-text" class="text-sm font-medium"></p>
+            <button id="close-message-btn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="space-y-4">
+            <form id="login-form-content">
                 <div class="mb-4">
                     <label for="member-id-login" class="block text-gray-700 text-sm font-bold mb-2">کد عضویت</label>
-                    <input type="text" id="member-id-login" name="member_id" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="کد عضویت خود را وارد کنید" required>
+                    <input type="text" id="member-id-login" name="member-id" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="کد عضویت" required>
                 </div>
                 <div class="mb-6">
-                    <label for="pin-login" class="block text-gray-700 text-sm font-bold mb-2">PIN</label>
-                    <input type="password" id="pin-login" name="pin" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="PIN خود را وارد کنید" required>
+                    <label for="pin-login" class="block text-gray-700 text-sm font-bold mb-2">رمز عبور (PIN)</label>
+                    <input type="password" id="pin-login" name="pin" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="****" required>
                 </div>
                 <div class="flex items-center justify-between">
                     <button type="submit" id="login-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:shadow-outline w-full transition-all duration-300">
@@ -63,13 +68,14 @@
                     </button>
                 </div>
             </form>
+        </div>
 
-            <!-- Registration Form -->
-            <form id="register-form" class="hidden">
-                <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">ثبت‌نام کاربر جدید</h2>
+        <!-- Register Form (Initially Hidden) -->
+        <div id="register-form" class="hidden space-y-4">
+            <form id="register-form-content">
                 <div class="mb-4">
-                    <label for="name-register" class="block text-gray-700 text-sm font-bold mb-2">نام کامل</label>
-                    <input type="text" id="name-register" name="name" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="نام و نام خانوادگی" required>
+                    <label for="name-register" class="block text-gray-700 text-sm font-bold mb-2">نام و نام خانوادگی</label>
+                    <input type="text" id="name-register" name="name" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="نام کامل" required>
                 </div>
                 <div class="mb-4">
                     <label for="email-register" class="block text-gray-700 text-sm font-bold mb-2">ایمیل</label>
@@ -95,10 +101,7 @@
     </div>
 
     <!-- Scripts -->
-    <!--  خطاهای 404 برای config.js و app.js به دلیل اینکه فایل config.js در پروژه وجود ندارد و app.js هم در ریشه قرار دارد، ایجاد می‌شود.
-          خط config.js حذف شده است و برای app.js مسیر صحیح است.
-          این تغییر باید خطاهای 404 را برطرف کند.
-    -->
+    <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
