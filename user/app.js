@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessageText = document.getElementById('error-message-text');
 
     // -------------------------------------------------------------
-    // تنظیم URL Apps Script
+    // لینک Apps Script شما به‌روزرسانی شده است.
     // -------------------------------------------------------------
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwipBlLlTyo1BUYwCZ6mmuHCUu9ZAW-_gCGrVQT0vVX3hKW8fVbwlqJ9WaVw_qpkHXd3Q/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwPv5KdE8w6Zg1K2Ltm8JnpXbtzdlQOuPSpt9zOeAHlGkFatfSL1gr2OsmZrlE8z0b8Jg/exec';
 
     // یک تابع کمکی برای نمایش پیام‌های تأیید و خطا
     function showMessage(message, type = 'error') {
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // منطق اصلی برای جابجایی بین فرم‌های ورود و ثبت‌نام
-    // این بخش به دقت بازبینی شده است تا مطمئن شویم که کار می‌کند.
     if (toggleFormBtn) {
         toggleFormBtn.addEventListener('click', () => {
             // بررسی می‌کنیم که کدام فرم در حال نمایش است
