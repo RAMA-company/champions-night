@@ -26,38 +26,42 @@ document.addEventListener('DOMContentLoaded', () => {
         messageBox.classList.remove('hidden');
     }
 
-    // منطق اصلی برای جابجایی بین فرم‌های ورود و ثبت‌نام
-    if (toggleFormBtn) {
-        toggleFormBtn.addEventListener('click', () => {
-            // بررسی می‌کنیم که کدام فرم در حال نمایش است
-            if (loginForm.classList.contains('hidden')) {
-                // اگر فرم ورود پنهان است، آن را نمایش می‌دهیم
-                loginForm.classList.remove('hidden');
-                registerForm.classList.add('hidden');
-                toggleFormBtn.textContent = 'ثبت‌نام نکرده‌اید؟ اینجا کلیک کنید';
-            } else {
-                // اگر فرم ورود نمایش داده شده، آن را پنهان می‌کنیم و فرم ثبت‌نام را نمایش می‌دهیم
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-                toggleFormBtn.textContent = 'قبلاً ثبت‌نام کرده‌اید؟ ورود به سیستم';
-            }
-            // هرگونه پیام قبلی را پنهان می‌کنیم
+    // بستن پیام
+    const closeMessageBtn = document.getElementById('close-message-btn');
+    if (closeMessageBtn) {
+        closeMessageBtn.addEventListener('click', () => {
             messageBox.classList.add('hidden');
         });
     }
 
-    // مدیریت ارسال فرم ورود
+    // مدیریت تغییر فرم ورود/ثبت‌نام
+    if (toggleFormBtn) {
+        toggleFormBtn.addEventListener('click', () => {
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
+            const isLoginVisible = !loginForm.classList.contains('hidden');
+            toggleFormBtn.textContent = isLoginVisible ? 'ثبت‌نام نکرده‌اید؟ اینجا کلیک کنید' : 'حساب کاربری دارید؟ اینجا کلیک کنید';
+        });
+    }
+
+    // -------------------------------------------------------------
+    // منطق ورود
+    // -------------------------------------------------------------
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            messageBox.classList.add('hidden');
 
             const memberId = document.getElementById('member-id-login').value;
             const pin = document.getElementById('pin-login').value;
 
-            const payload = { member_id: memberId, pin: pin };
+            if (!memberId || !pin) {
+                showMessage('لطفاً کد عضویت و پین را وارد کنید.');
+                return;
+            }
+
+            const payload = { memberId, pin };
             try {
-                const response = await fetch(`${API_URL}?pathInfo=auth/login-code`, {
+                const response = await fetch(`${API_URL}?pathInfo=auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -65,12 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (result.ok) {
-                    localStorage.setItem('gym_token', result.data.token);
-                    localStorage.setItem('memberId', result.data.member_id);
-                    showMessage('ورود با موفقیت انجام شد.', 'success');
-                    setTimeout(() => window.location.href = 'user/index.html', 1500);
+                    // ذخیره توکن و مسیر هدایت
+                    localStorage.setItem('userToken', result.data.token);
+                    showMessage('ورود موفقیت‌آمیز! در حال انتقال به پنل کاربری...', 'success');
+                    window.location.href = result.data.redirect_url;
                 } else {
-                    showMessage(result.error || 'خطا در ورود به سیستم.');
+                    showMessage(result.error || 'خطا در ورود.');
                 }
             } catch (error) {
                 console.error('Login Error:', error);
@@ -79,11 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // مدیریت ارسال فرم ثبت‌نام
+    // -------------------------------------------------------------
+    // منطق ثبت‌نام
+    // -------------------------------------------------------------
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            messageBox.classList.add('hidden');
 
             const name = document.getElementById('name-register').value;
             const email = document.getElementById('email-register').value;
