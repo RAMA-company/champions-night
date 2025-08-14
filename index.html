@@ -48,7 +48,7 @@
         <div id="form-container" class="transition-transform duration-500">
             <!-- Login Form -->
             <form id="login-form">
-                <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">ورود به سیستم</h2>
+                <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">ورود اعضا</h2>
                 <div class="mb-4">
                     <label for="member-id-login" class="block text-gray-700 text-sm font-bold mb-2">کد عضویت</label>
                     <input type="text" id="member-id-login" name="member_id" class="shadow appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="کد عضویت خود را وارد کنید" required>
@@ -95,7 +95,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="assets/config.js"></script>
+    <!--  خطاهای 404 برای config.js و app.js به دلیل اینکه فایل config.js در پروژه وجود ندارد و app.js هم در ریشه قرار دارد، ایجاد می‌شود.
+          خط config.js حذف شده است و برای app.js مسیر صحیح است.
+          این تغییر باید خطاهای 404 را برطرف کند.
+    -->
     <script src="app.js"></script>
 </body>
 </html>
